@@ -1,1 +1,2 @@
-# Python-Report-2-
+# Python-Report2
+In my report, I've created a report using Python for my Economic Transporation Class. In the report, I use a variety of functions including NumPy, Pandas, Scipy, Seaborn, & Statsmodels to analyze and interpret data observations/outcomes. First I cleaned through the given dataset, and following I regressed and graphed particular models with different variables in place. I then interpreted my models, and how or why they are reflected in their respective empirical values.  Lastly, I created a logistic model to better predict probabilities before diving into the theoretical aspects of such functions.
