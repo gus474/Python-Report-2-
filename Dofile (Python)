@@ -1,0 +1,61 @@
+Dofile:
+import pandas as pd
+from numpy import*
+import matplotlib.pyplot as plt
+from pandas import DataFrame, read_csv
+from scipy.interpolate import*
+#from mlxtend.plotting import plot_linear_regression
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+from statsmodels.formula.api import ols
+file = r'C://Users//Production//Downloads//ps2_data.csv'
+df = pd.read_csv(file)
+df.describe(include='all').transpose()
+df= df.dropna()
+df.describe()
+model1 = ols('epatmpg ~ children_under_16 + vehage + rural + gscost + hh_income + ba_grad',
+df).fit()
+print(model1.summary())
+v = df.vehtype.unique()
+u = df.vehtype.count()
+w = df.groupby(['vehtype']).count()/u
+w
+model2 = ols('epatmpg ~ children_under_16 + vehage + rural + gscost + hh_income + ba_grad
++ C(vehtype)', df).fit()
+print(model2.summary())
+ee=df[df['vehtype']=='CAR']
+ee
+minivan = df[df['vehtype'] == 'MINIVAN']
+minivan
+pickup = df[df['vehtype'] == 'PICKUP']
+smallsuv = df[df['vehtype'] == 'SMALL SUV']
+largesuv = df[df['vehtype'] == 'LARGE SUV']
+sns.regplot(x=ee['vehage'], y=ee['epatmpg'], data = ee)
+sns.regplot(x=minivan['vehage'], y=minivan['epatmpg'], data = minivan)
+sns.regplot(x=pickup['vehage'], y=pickup['epatmpg'], data = pickup)
+sns.regplot(x=smallsuv['vehage'], y=smallsuv['epatmpg'], data = smallsuv)
+sns.regplot(x=largesuv['vehage'], y=largesuv['epatmpg'], data = largesuv)
+#do each individually!
+import statsmodels.api as sm
+x = df.drop(['vehtype', 'automaker','hhstate','adults', 'fueltype', 'domestic', 'hybrid', 'epatmpg' ],
+axis = 1)
+x = sm.add_constant(x)
+y = df['vehtype']
+logit_model = sm.MNLogit(y,x)
+results = logit_model.fit()
+stats1 = results.summary()
+print(stats1)
+AME = results.get_margeff(at = 'overall', method = 'dydx')
+print(AME.summary())
+def add_new(x):
+return x+.2
+df['gscost'] = df['gscost'].apply(add_new)
+logit_model2 = sm.MNLogit(y,x)
+results2 = logit_model2.fit()
+stats2 = results2.summary()
+print(stats2)
+AME1 = results2.get_margeff(at = 'overall', method = 'dydx')
+print(AME1.summary())
+x
+model3 = ols('vehage~children_under_16 + rural',df).fit()
+model3.summary()
